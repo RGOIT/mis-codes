@@ -1,0 +1,49 @@
+public with sharing class MyClassA
+{
+    public static void method1(String NombreProy,String Cliente, String startDate,String ScDate,decimal Budged)
+{
+       String[] myDateOnly1 = StartDate.split(' ');
+       String[] strDate1 = myDateOnly1[0].split('/');
+       Integer myIntDate1 = integer.valueOf(strDate1[1]);
+       Integer myIntMonth1 = integer.valueOf(strDate1[0]);
+       Integer myIntYear1 = integer.valueOf(strDate1[2]);
+       Date StartDate1 = Date.newInstance(myIntYear1, myIntMonth1, myIntDate1);   
+       
+  String[] myDateOnly = ScDate.split(' ');
+       String[] strDate = myDateOnly[0].split('/');
+       Integer myIntDate = integer.valueOf(strDate[1]);
+       Integer myIntMonth = integer.valueOf(strDate[0]);
+       Integer myIntYear = integer.valueOf(strDate[2]);
+       Date SDate = Date.newInstance(myIntYear, myIntMonth, myIntDate);
+       
+      
+
+   Proyecto__C WebPro = new Proyecto__C ();
+         WebPro.name= NombreProy;
+         Webpro.Client__c= Cliente;
+       WebPro.Start_Date__c=startDate1;
+       WebPro.Scheduled_date__c= SDate;
+         WebPro.Budget_proposed__c=Budged;
+    Insert WebPro;
+ }
+}
+
+
+global with sharing class MyClassB
+{
+    global static void method2(String NombreProy,String Cliente,String startDate,String ScDate,decimal Budged)
+    {
+        MyClassA.method1(  NombreProy, Cliente,  startDate, ScDate,  Budged);
+    }
+}
+
+
+
+@RestResource (urlmapping ='/v34.0/projects/create')
+        global with sharing class MyclassC
+ {
+     @HttpPost global static void method1(String NombreProy,String Cliente,String startDate,String ScDate,decimal Budged)
+        {
+          MyclassB.method2( NombreProy, Cliente, startDate,  ScDate,  Budged);
+        }
+  }
